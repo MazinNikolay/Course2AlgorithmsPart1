@@ -28,7 +28,7 @@ public class StringListController {
 
     @ExceptionHandler(InvalidArgException.class)
     public ResponseEntity<String> handleInvalidArg() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Не введен(ы) аргумент(ы)");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Не корректно ввдены аргументы");
     }
 
     @ExceptionHandler(IncorrectSizeInput.class)
@@ -86,6 +86,11 @@ public class StringListController {
         return stringListService.remove(item);
     }
 
+    @GetMapping(path = "/contains")
+    public boolean contais(@RequestParam(value = "item", required = false) String item) {
+        return stringListService.contains(item);
+    }
+
     @GetMapping(path = "/indexOf")
     public int indexOf(@RequestParam(value = "item", required = false) String item) {
         return stringListService.indexOf(item);
@@ -99,6 +104,32 @@ public class StringListController {
     @GetMapping(path = "/get")
     public String get(@RequestParam(value = "index", required = false) String index) {
         return stringListService.get(index);
+    }
+
+    //В качестве параметра передаю  firrst или second - это ссылки для раззных объектов StringList
+    @GetMapping(path = "/equals")
+    public boolean equals(@RequestParam(value = "otherList", required = false) String otherList) {
+        return stringListService.equals(otherList);
+    }
+
+    @GetMapping(path = "/size")
+    public int equals() {
+        return stringListService.size();
+    }
+
+    @GetMapping(path = "/isEmpty")
+    public boolean isEmpty() {
+        return stringListService.isEmpty();
+    }
+
+    @GetMapping(path = "/clear")
+    public void clear() {
+        stringListService.clear();
+    }
+
+    @GetMapping(path = "/toArray")
+    public String[] toArray() {
+        return stringListService.toArray();
     }
 
     @GetMapping(path = "/print")

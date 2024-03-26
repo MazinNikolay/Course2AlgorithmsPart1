@@ -67,6 +67,10 @@ public class StringListImpl implements StringList {
         int index = indexOf(item);
         arrayList[index] = null;
         actualSize--;
+        for (int i = index; i < actualSize; i++) {
+            arrayList[i] = arrayList[i + 1];
+        }
+        arrayList[actualSize] = null;
         return item;
     }
 
@@ -75,12 +79,16 @@ public class StringListImpl implements StringList {
         String item = get(index);
         arrayList[index] = null;
         actualSize--;
+        for (int i = index; i < actualSize; i++) {
+            arrayList[i] = arrayList[i + 1];
+        }
+        arrayList[actualSize] = null;
         return item;
     }
 
     @Override
     public boolean contains(String item) {
-        return false;
+        return lastIndexOf(item) > -1;
     }
 
     @Override
@@ -110,40 +118,40 @@ public class StringListImpl implements StringList {
 
     @Override
     public String get(int index) {
-        return arrayList[index];
-    }
+            return arrayList[index];
+        }
 
     @Override
     public boolean equals(StringList otherList) {
-        return false;
+        return this == otherList && this.hashCode() == otherList.hashCode();
     }
 
     @Override
     public int size() {
-        return 0;
+        return actualSize;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        for (String s : arrayList) {
+            if (s != null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public void clear() {
-
+        for (int i = 0; i < arrayList.length; i++) {
+            arrayList[i] = null;
+        }
     }
 
     @Override
     public String[] toArray() {
-        return new String[0];
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StringListImpl that = (StringListImpl) o;
-        return actualSize == that.actualSize && Arrays.equals(arrayList, that.arrayList);
+        String[] array = getArrayList();
+        return array;
     }
 
     @Override

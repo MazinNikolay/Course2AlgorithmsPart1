@@ -2,7 +2,6 @@ package pro.sky.Course2AlgorithmsPart1.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.Course2AlgorithmsPart1.exceptions.*;
-import pro.sky.Course2AlgorithmsPart1.interfaces.StringList;
 import pro.sky.Course2AlgorithmsPart1.model.StringListImpl;
 
 @Service
@@ -46,6 +45,9 @@ public class StringListService {
         isExistList(stringList);
         isValidArgument(item);
         isExistElement(item);
+        if (!stringList.contains(item)) {
+            throw new NotFoundException();
+        }
         return stringList.remove(item);
     }
 
@@ -53,11 +55,16 @@ public class StringListService {
     public String remove(int index) {
         isExistList(stringList);
         isIndexCorrect(index);
+        if (stringList.get(index) == null) {
+            throw new NotFoundException();
+        }
         return stringList.remove(index);
     }
 
     public boolean contains(String item) {
-        return false;
+        isExistList(stringList);
+        isValidArgument(item);
+        return stringList.contains(item);
     }
 
     public int indexOf(String item) {
@@ -80,24 +87,37 @@ public class StringListService {
         return stringList.get(intIndex);
     }
 
-    public boolean equals(StringList otherList) {
-        return false;
+    public boolean equals(String otherList) {
+        isExistList(stringList);
+        isValidArgument(otherList);
+        StringListImpl resultList;
+        switch (otherList) {
+            case "first":
+                resultList = new StringListImpl(10);
+                break;
+            case "second":
+                resultList = stringList;
+                break;
+            default:
+                throw new InvalidArgException();
+        }
+        return stringList.equals(resultList);
     }
 
     public int size() {
-        return 0;
+        return stringList.size();
     }
 
     public boolean isEmpty() {
-        return false;
+        return stringList.isEmpty();
     }
 
     public void clear() {
-
+        stringList.clear();
     }
 
     public String[] toArray() {
-        return new String[0];
+        return stringList.toArray();
     }
 
     public String printArray() {
@@ -153,7 +173,7 @@ public class StringListService {
     }
 
     private void isExistElement(String arg) {
-        if (stringList.indexOf(arg) < 0) {
+        if (stringList.lastIndexOf(arg) < 0) {
             throw new NotFoundException();
         }
     }
