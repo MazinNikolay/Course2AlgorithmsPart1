@@ -118,8 +118,8 @@ public class StringListImpl implements StringList {
 
     @Override
     public String get(int index) {
-            return arrayList[index];
-        }
+        return arrayList[index];
+    }
 
     @Override
     public boolean equals(StringList otherList) {
@@ -143,14 +143,12 @@ public class StringListImpl implements StringList {
 
     @Override
     public void clear() {
-        for (int i = 0; i < arrayList.length; i++) {
-            arrayList[i] = null;
-        }
+        Arrays.fill(arrayList, null);
     }
 
     @Override
     public String[] toArray() {
-        String[] array = getArrayList();
+        String[] array = Arrays.copyOf(arrayList, arrayList.length);
         return array;
     }
 
