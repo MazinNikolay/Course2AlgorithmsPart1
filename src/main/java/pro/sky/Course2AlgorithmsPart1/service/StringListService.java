@@ -22,74 +22,54 @@ public class StringListService {
 
     public String add(String index, String item) {
         isExistList(stringList);
-        isValidArgument(item);
-        isInBound();
         if (index == null) {
             return stringList.add(item);
         } else {
             int intIndex = Integer.parseInt(index);
-            isIndexCorrect(intIndex, true);
             return stringList.add(intIndex, item);
         }
     }
 
     public String set(String index, String item) {
         isExistList(stringList);
-        isValidArgument(index, item);
         int intIndex = Integer.parseInt(index);
-        isIndexCorrect(intIndex);
         return stringList.set(intIndex, item);
     }
 
     public String remove(String item) {
         isExistList(stringList);
-        isValidArgument(item);
-        isExistElement(item);
-        if (!stringList.contains(item)) {
-            throw new NotFoundException();
-        }
         return stringList.remove(item);
     }
 
 
     public String remove(int index) {
         isExistList(stringList);
-        isIndexCorrect(index);
-        if (stringList.get(index) == null) {
-            throw new NotFoundException();
-        }
         return stringList.remove(index);
     }
 
     public boolean contains(String item) {
         isExistList(stringList);
-        isValidArgument(item);
         return stringList.contains(item);
     }
 
     public int indexOf(String item) {
         isExistList(stringList);
-        isValidArgument(item);
         return stringList.indexOf(item);
     }
 
     public int lastIndexOf(String item) {
         isExistList(stringList);
-        isValidArgument(item);
         return stringList.lastIndexOf(item);
     }
 
     public String get(String index) {
         isExistList(stringList);
-        isValidArgument(index);
         int intIndex = Integer.parseInt(index);
-        isIndexCorrect(intIndex);
         return stringList.get(intIndex);
     }
 
     public boolean equals(String otherList) {
         isExistList(stringList);
-        isValidArgument(otherList);
         StringListImpl resultList;
         switch (otherList) {
             case "first":
@@ -109,14 +89,17 @@ public class StringListService {
     }
 
     public boolean isEmpty() {
+        isExistList(stringList);
         return stringList.isEmpty();
     }
 
     public void clear() {
+        isExistList(stringList);
         stringList.clear();
     }
 
     public String[] toArray() {
+        isExistList(stringList);
         return stringList.toArray();
     }
 
@@ -124,7 +107,6 @@ public class StringListService {
         isExistList(stringList);
         return stringList.toString();
     }
-
 
     private void isValidArgument(String arg) {
         boolean isNull = arg == null;
@@ -137,44 +119,9 @@ public class StringListService {
         }
     }
 
-    private void isValidArgument(String arg1, String arg2) {
-        boolean isNull = arg1 == null || arg2 == null;
-        boolean isEmpty = false;
-        if (!isNull) {
-            isEmpty = arg1.isEmpty() || arg2.isEmpty();
-        }
-        if (isNull || isEmpty) {
-            throw new InvalidArgException();
-        }
-    }
-
     private void isExistList(StringListImpl stringList) {
         if (stringList == null) {
             throw new NoExistListException();
-        }
-    }
-
-    private void isIndexCorrect(int index, boolean isAddMethod) {
-        if (index >= stringList.getArrayList().length || index > stringList.getActualSize()) {
-            throw new IndexOutOfRangeException();
-        }
-    }
-
-    private void isIndexCorrect(int index) {
-        if (index >= stringList.getArrayList().length || index >= stringList.getActualSize()) {
-            throw new IndexOutOfRangeException();
-        }
-    }
-
-    private void isInBound() {
-        if (stringList.getActualSize() >= stringList.getArrayList().length) {
-            throw new OutOfBoundsExceptions();
-        }
-    }
-
-    private void isExistElement(String arg) {
-        if (stringList.lastIndexOf(arg) < 0) {
-            throw new NotFoundException();
         }
     }
 }
