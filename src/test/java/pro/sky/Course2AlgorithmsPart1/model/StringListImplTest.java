@@ -169,9 +169,7 @@ class StringListImplTest {
         out.add("111");
         out.add("222");
         out.add("333");
-        out.add("444");
-        out.add("555");
-        String[] expected = {"111", "222", "333", "444", "555"};
+        String[] expected = {"111", "222", "333"};
         String[] actual = out.toArray();
         assertArrayEquals(expected, actual);
     }

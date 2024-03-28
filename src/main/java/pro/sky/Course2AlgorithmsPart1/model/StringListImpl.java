@@ -27,8 +27,7 @@ public class StringListImpl implements StringList {
     public String add(String item) {
         isValidArgument(item);
         isInBound();
-        arrayList[actualSize] = item;
-        actualSize++;
+        arrayList[actualSize++] = item;
         return item;
     }
 
@@ -36,10 +35,12 @@ public class StringListImpl implements StringList {
     public String add(int index, String item) {
         isValidArgument(item);
         isInBound();
-        isIndexInRange(index, true);
-        for (int i = actualSize; i > index; i--) {
-            arrayList[i] = arrayList[i - 1];
+        isIndexInRange(index);
+        if (index == actualSize) {
+            arrayList[actualSize++] = item;
+            return item;
         }
+        System.arraycopy(arrayList, index, arrayList, index + 1, actualSize - index);
         arrayList[index] = item;
         actualSize++;
         return item;
@@ -59,25 +60,18 @@ public class StringListImpl implements StringList {
         isExistElement(item);
         int index = indexOf(item);
         isIndexInRange(index);
-        arrayList[index] = null;
-        actualSize--;
-        for (int i = index; i < actualSize; i++) {
-            arrayList[i] = arrayList[i + 1];
-        }
-        arrayList[actualSize] = null;
-        return item;
+        return remove(index);
     }
 
     @Override
     public String remove(int index) {
         isIndexInRange(index);
         String item = get(index);
-        arrayList[index] = null;
-        actualSize--;
-        for (int i = index; i < actualSize; i++) {
-            arrayList[i] = arrayList[i + 1];
+        if (index != actualSize) {
+            System.arraycopy(arrayList, index + 1, arrayList, index, actualSize - index);
+            return item;
         }
-        arrayList[actualSize] = null;
+        arrayList[actualSize--] = null;
         return item;
     }
 
@@ -118,7 +112,7 @@ public class StringListImpl implements StringList {
     @Override
     public boolean equals(StringList otherList) {
         isValidArgument(otherList);
-        return this == otherList && this.hashCode() == otherList.hashCode();
+        return this == otherList && this.hashCode() == otherList.hashCode() && Arrays.equals(this.toArray(), otherList.toArray());
     }
 
     @Override
@@ -139,11 +133,12 @@ public class StringListImpl implements StringList {
     @Override
     public void clear() {
         Arrays.fill(arrayList, null);
+        actualSize = 0;
     }
 
     @Override
     public String[] toArray() {
-        String[] array = Arrays.copyOf(arrayList, arrayList.length);
+        String[] array = Arrays.copyOf(arrayList, actualSize);
         return array;
     }
 
@@ -178,14 +173,8 @@ public class StringListImpl implements StringList {
         }
     }
 
-    private void isIndexInRange(int index, boolean isAddMethod) {
-        if (index >= arrayList.length || index > actualSize) {
-            throw new IndexOutOfRangeException();
-        }
-    }
-
     private void isIndexInRange(int index) {
-        if (index >= arrayList.length || index >= actualSize) {
+        if (index < 0 || index >= actualSize) {
             throw new IndexOutOfRangeException();
         }
     }
